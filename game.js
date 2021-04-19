@@ -64,6 +64,27 @@ const prompt = require('prompt-sync')();
     
  }
 
+ const playerMove = () => {
+    let location = prompt('Where do you want to mark ?');
+  
+     location = parseInt(location) 
+     if(board[location] == ' '){
+  
+     board[location] = 'x'
+
+  
+     if(checkWin(board) == 1){
+        console.log('**************YOU WON!!!!!!*************\n\n')
+        printBoard(board)
+        gameOver = true
+     }
+    }
+    else {
+        console.log('The position is already taken')
+        playerMove()
+    }
+}
+
  const bestMove = () => {
  
     let bestScore = -Infinity
@@ -99,7 +120,7 @@ const minimax = (board,depth,isMax) => {
               board[i] = 'o'
               let score = minimax(board,depth+1,false)
               board[i] = ' '
-              bestScore = Math.max(score,bestScore)
+              bestScore = Math.max(10*score,bestScore)
           }
        } return bestScore;
    } else {
@@ -109,7 +130,7 @@ const minimax = (board,depth,isMax) => {
               board[i] = 'x'
               let score = minimax(board,depth+1,true)
               board[i] = ' '
-              bestScore = Math.min(score,bestScore)
+              bestScore = Math.min(10*score,bestScore)
           }
        } return bestScore; 
    }
@@ -118,41 +139,23 @@ const minimax = (board,depth,isMax) => {
 
 
  while(!gameOver){
+    bestMove(); 
+    if(checkWin(board,'o') == 1){
+
+    console.log('COMP WON!!')
+    printBoard(board)
+    gameOver = true
+    break;
+    } 
      printBoard(board)
-  
-     let location = prompt('Where do you want to mark ?');
-  
-     location = parseInt(location) 
-     if(board[location] == ' '){
-  
-     board[location] = 'x'
-
-  
-     if(checkWin(board) == 1){
-        console.log('**************YOU WON!!!!!!*************\n\n')
-        printBoard(board)
-        gameOver = true
-     }
-     
-     else {
-        bestMove(); 
-        if(checkWin(board,'o') == 1){
-
-        console.log('COMP WON!!')
-        printBoard(board)
-        gameOver = true
-    
-        }
-    }
-     
-    } else {
-        console.log('The position is already taken')
-    }
-
     if(checkWin(board) == 0){
-        console.log('Its a draw')
+        console.log('Its a draw. You cant win anyways')
         gameOver = true
-    }     
+        break;
+    }  
+  
+     
+     playerMove()    
      
  }
 
